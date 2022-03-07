@@ -1,0 +1,159 @@
+start virtual environment 
+    py -3 -m venv venv
+
+pip install fastapi[all]#adds all the extra tools
+async function
+    main reason to use it is for asyncronous operations
+
+Start server
+    uvicorn main:app --reload
+    uvicorn app.main:app --reload  
+To consider:
+    When doing posts we need to limit what the user can post. Also we need to validate the data, and we want 
+    the user to send the data in a schema we expect
+
+http
+    http status codes https://developer.mozilla.org/en-US/docs/Web/HTTP/Status
+    http methods
+
+ValidatioN
+    done with pydantic
+
+Pydantic
+    done with pydantic
+    Convert pydantic model to dict
+        .dict()
+
+CRUD: create read, Update, Delete
+    #Example:
+    @app.post("/posts")# create
+    @app.get("/posts/{id}") # read get
+    @app.get("/posts")  #read all get
+    @app.put("/posts/{id}") #update
+    @app.delete("/posts/{id}") #delete
+
+
+
+
+SQL
+
+    SELECT * from products; the * looks for everything in the table "products"
+    SELECT name from products;
+    SELECT id,name from products;
+
+    #Rename
+    Select id AS products_id FROM products;
+
+    #Filter
+    SELECT * FROM products WHERE id = 3;
+    #For strings (single quotes)
+    SELECT * FROM products WHERE name = 'TV'
+
+    #Conditions
+    SELECT * FROM products WHERE price <= 150;
+    #NOT
+    SELECT * FROM products WHERE inventory != 0;
+    SELECT * FROM products WHERE inventory <> 0;
+
+    #Multiple operators
+    SELECT * FROM products WHERE inventory > 0 AND price > 20;
+    SELECT * FROM products WHERE inventory > 0 OR price > 20;
+
+    #IN operator , to look for multiple things for example search for ids 1-3
+    SELECT * FROM products WHERE id IN(1,2,3) ;
+
+    #We have multiple items with same name. Search for them
+    SELECT * FROM products WHERE name LIKE 'TV%' ;
+    SELECT * FROM products WHERE name LIKE 'r%' ;
+    #Also that ends with
+    SELECT * FROM products WHERE name LIKE '%e' ;
+    #Search for something containing those letters
+    SELECT * FROM products WHERE name LIKE '%em%' ;
+
+    #Ordering
+    SELECT * FROM products ORDER BY price;
+    SELECT * FROM products ORDER BY price DESC; #Descending
+    # Insert a second thing to consider for sorting in case of tie
+    SELECT * FROM products ORDER BY inventory DESC, price;
+
+    #Limits the amount of results
+    SELECT * FROM products WHERE price<50 ORDER BY price DESC LIMIT 1;
+    #Skip rows with OFFSET
+    SELECT * FROM products WHERE price<50 ORDER BY id DESC LIMIT 5 OFFSET 2;
+
+    #Adding entries
+    INSERT INTO products (price, name, inventory) VALUES (10000, 'car', 1000)
+    Showing results
+    INSERT INTO products (price, name, inventory) VALUES (10000, 'car', 1000) returning * ;
+    #Adding multiple
+    INSERT INTO products (price, name, inventory) VALUES (10000, 'car', 1000),(50,'laptop',25),(60,'monitor',4) returning * ;
+    INSERT INTO products (price, name, inventory) VALUES (10000, 'car', 1000),(50,'laptop',25),(60,'monitor',4) returning id, created_at, name ;
+
+    #Delete
+    DELETE FROM products WHERE id = 10 ;
+    #Get specific entry before deletion
+    DELETE FROM products WHERE id = 11 RETURNING * ;
+
+    #Update
+    UPDATE products SET name='Flower tortilla', price=40 WHERE id=25 ;
+    #Returning 
+    UPDATE products SET is_sale = true WHERE id=21 RETURNING *;
+    #Condition
+    UPDATE products SET is_sale = true WHERE id>15 RETURNING *;
+
+Query Parameters:
+    Adding functions to the query:
+    def get_posts(db: Session = Depends(get_db), current_user:int = Depends (oath2.get_current_user),
+    limit :int = 10, skip: int = 0):
+    posts=db.query(models.Post).limit(limit).offset(skip).all()
+
+    .limit adds the amount of results shown
+    .offset is where to start
+    .filter(models.Post.title.contains(search)
+    
+Environment varialbles: here you can create any variable to later access
+    import os 
+    path= os.getenv("Path")
+    print(path)
+
+#Count
+    SELECT users.id, COUNT(posts.id) FROM posts RIGHT JOIN users ON posts.owner_id = users.id group by users.id;
+    SELECT posts.*, COUNT(votes.post_id) as likes FROM posts LEFT JOIN votes ON posts.id = votes.post_id GROUP BY posts.id where post_id=10;
+
+ 
+
+ORM Object-relational-mapping
+    Adding functions to the query:
+    def get_posts(db: Session = Depends(get_db), current_user:int = Depends (oath2.get_current_user),
+    limit :int = 10, skip: int = 0):
+    posts=db.query(models.Post).limit(limit).offset(skip).all()
+
+ 
+
+    .limit adds the amount of results shown
+    .offset is where to start
+    
+Alembic Database Migration tool
+    alembic init alembic
+    alembic revision -m "your message for your revision" #will create your revision file to create stuff
+    #documentation at : alembic API details, DDL internals
+    alembic head # gives info on the latest revision
+    alembic upgrade --help
+    alembic upgrade head #upgrades to the last version
+    alembic upgrade "number"
+    alembic downgrade "number"
+    alembic downgrade -1
+    alembic revision --autogenerate -m "auto-vote"
+
+
+Cors : cross origin resource sharing
+    fetch('http://localhost:8000/').then(res => res.json()).then(console.log) #using inspect
+    Documentation on fastapi
+    from fastapi.middleware.cors import CORSMiddleware
+
+    app.add_middleware(
+    CORSMiddleware,
+    allow_origins=[],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"], )
