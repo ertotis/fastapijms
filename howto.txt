@@ -157,3 +157,139 @@ Cors : cross origin resource sharing
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"], )
+
+Deploying Heroku
+    https://devcenter.heroku.com/articles/getting-started-with-python#define-a-procfile
+    https://fastapi-jms.herokuapp.com/
+    git push heroku main
+    heroku apps:info fastapi-jms
+    heroku logs -t
+    heroku ps:restart
+    heroku ps --help
+    heroku addons:create heroku-postgresql:hobby-dev
+    #run a command in our heroku instance:
+    heroku run "alembic upgrade head" 
+
+    #making changes:
+        #make the changes in your code
+        git add  and the git push heroku main
+
+        #if your make changes in your Database
+        heroku run "alembic ..."
+
+
+digitalocean
+    Root
+    pw: KiNdle2018!a
+    jms
+    pw: Kindle2018
+
+    connect to a device in cmd
+    ssh root@207.154.252.183 and insert the password
+    you are inside, check ls
+
+    Ubuntu new machine
+        sudo apt update && sudo apt upgrade -y
+        #install python (python3 --version)
+        sudo apt install python3-pip
+        sudo pip3 install virtualenv
+        sudo apt install postgresqul postgresql-contrib -y
+
+        #other commands
+            whoami
+            cd ~ takes you to home directory
+            mkdir #create a directory
+            virtualenv venv #create virtual environment
+            source venv/bin/activate #activate the virtualenvironment
+            ls -la shows all directories
+            clone from git:
+            git clone https://oauth-key-goes-here@github.com/username/repo.git
+            cat requirements.txt #opens the file
+            pip install -r requirements.txt
+            sudo reboot
+            :wq #write quit
+            ps -aef | grep -i gunicorn
+
+            #Create environment varialbles
+                export variablename=value
+                printenv #shows all environment varialbles
+                unset variablename #removes the env variable
+
+            #create file
+                touch .env
+
+            #open file
+                vi .env
+                inside here we could add all the variables with the export variablename=value
+
+            #setting environment variables in a good way
+                set -o allexport; source /home/jms/.env; set +o allexport
+                #to save them when rebooting
+                in the main directory go to
+                vi .profile # and paste the set-o... in the last line
+
+
+
+            
+
+        su -"name" #changes you to a different user
+        sudo cat /etc/passwd #reveals all users
+        #connect to CLI
+        psql
+        psql --help
+        Log into the database
+        psql -U postgres 
+        \password postgres #to change the password por that user
+        #exit
+        \q
+        #navigate into the postgress folder: in linux you usually navigate to etc folder
+        #enter postgresql.conf file
+        sudo vi postgresql.conf
+        #inside it add the list_addresses='*' (under connection and authentication) :wq to exit
+        #enter pg_hba.conf file
+        sudo vi ...
+        #change all passwords to md5 and the ipv4 local connection to 0.0.0.0/0 to allow all
+        #and in ipv6 ::/0
+        #restart application
+        systemctl restart postgresql
+
+        #now log in again
+        psql -U postgres
+
+        #Create new user
+            adduser jms
+            #change to that user
+            su - jms
+            ssh jms@207.154.252.183
+        #Add root privileges to this user
+            usermod -aG sudo jms
+
+    #Start the app
+    uvicorn app.main:app
+
+    #Create our Database
+    alembic upgrade head 
+    uvicorn --host 0.0.0.0 app.main:app
+    #problem here is that it will not autostart in case of failure so we need to use a process manager
+        pip install gunicorn
+        gunicorn --help
+        gunicorn -w 4 -k uvicorn.workers.UvicornWorker app.main:app --bind 0.0.0.0:8000
+
+        #create a service
+            cd /etc/systemd/system/
+            ls
+            #now you see all the services
+            sudo vi api.service #to create and open a file called api.service
+            paste the contents of gunivorn.service
+            systemctl start api #start the service
+            systemctl status api
+            #make it start automatically on reboot:
+            sudo systemctl enable api
+
+
+
+
+
+
+
+        

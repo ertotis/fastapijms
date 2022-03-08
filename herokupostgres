@@ -1,0 +1,14 @@
+Host
+ec2-18-210-191-5.compute-1.amazonaws.com
+Database
+d78hbrdc5gisvu
+User
+wqglfiivikvsov
+Port
+5432
+Password
+f2008a0f5ba324030b0c3187c98721610744ab67f263600a2f536f32b4f0dee3
+URI
+postgres://wqglfiivikvsov:f2008a0f5ba324030b0c3187c98721610744ab67f263600a2f536f32b4f0dee3@ec2-18-210-191-5.compute-1.amazonaws.com:5432/d78hbrdc5gisvu
+Heroku CLI
+heroku pg:psql postgresql-aerodynamic-42872 --app fastapi-jms
