@@ -229,7 +229,7 @@ digitalocean
                 vi .profile # and paste the set-o... in the last line
 
 
-
+        Postgres Password : Kindle2018!
             
 
         su -"name" #changes you to a different user
@@ -285,6 +285,41 @@ digitalocean
             systemctl status api
             #make it start automatically on reboot:
             sudo systemctl enable api
+
+NGINX web server
+    systemctl start NGINX
+    to see it visit your IP
+    change a file in
+    /etc/nginx/sites-available
+    sudo vi default and copy the destination files 
+
+Setting a domain and https
+    get a https domain (at namecheap)
+        jmsi.xyz
+    point your oceanx domain to your domain
+    custom DNS: write the one provided by digital ocean
+    on digitalocean site: manage domain DNS
+    create an A record
+    create a cname www @
+
+    #Once your domain is working setup SSL : certbot
+    https://certbot.eff.org/instructions?ws=nginx&os=ubuntufocal
+    follow the instructions
+    in the domain name jmsi.xyz and www.jmsi.xyz
+    if its disabled on startutp
+    systemctl enable ngingx
+
+Set a firewall : ufw
+    sudo ufw allow http
+    sudo ufw allow https
+    sudo ufw allow ssh
+    sudo ufw allow 5432
+    sudo ufw enable
+    sudo ufw status
+    #delete rule
+    sudo ufw delete allow 5432
+
+
 
 
 

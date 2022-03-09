@@ -12,8 +12,8 @@ models.Base.metadata.create_all(bind=engine)
 #---------------------------------------
 
 app=FastAPI()
-
-origins=["https://www.google.com"]
+#The list of origins that can access your API
+origins=["*"]
 
 app.add_middleware(
     CORSMiddleware,
@@ -30,7 +30,7 @@ app.include_router(vote.router)
 
 @app.get("/")
 async def root():
-    return {"message" : "Hello World"}
+    return {"message" : "Hello World!!!!"}
 
 
 
