@@ -319,10 +319,67 @@ Set a firewall : ufw
     #delete rule
     sudo ufw delete allow 5432
 
+to push or pull changes:
+    #just in the windows directory modify it upload to git (git push origin main)
+    #from the virtual machine git pull
+    #if things changedd in the txt pip install -r requirements.txt
+    sudo systemctl restart api
 
+Docker
+    create a Dockerfile in directory
+    COPY . .  #copies current directory in container directory
+    docker build -t fastapi . #t stands for tag and fastapi is the name we give it
+    docker image ls
+    #docker compose to spin up our containers
+        create a file called docker-compose.yml
+            - <port on localhost>:<port on container>
+            docker-compose up -d
+            docker ps
+            docker logs "name of container"
+            docker-compose down
+            docker image ls
+            docker build
+            docker exec -it fastapi_api bash #enters interactive mode (enters ubuntu)
+            docker-compose -f docker-compose-dev.yml up -d
+    #Binding docker to a local folder(bind mount):
+        volumes:
+        - ./:/user/src/app:ro #left side is local folder right side is folder in docker
+        :ro #this means read only
+    #Add a postgres database to a container by adding a service
+        need to build volumes
 
+    #Rename image
+        docker image tag fastapi_api totisjosema/fastapi (first is old second is new)
+    #upload to dockerhub
+        docker push totisjosema/fastapi:tagname
 
+    #In production you don´t build the image, you pull it:
 
+Testing:
+    pip install pytest
+    pytest : #will look all of the files that have test as prefix
+    -v: # increased verbosity
+    -s: # see print statements
+    pytest -v -s tests\test_users.py #runs only one
+    pytest --disable-warnings -v
+    #if you want your code to stop after the first fail:
+    -x
+
+    @pytest.mark.parametrize("num1, num2, expected",[num1,num2,expected])
+    @pytest.fixute #creates a template to be reused
+    
+    #Fastapi:
+        #See documentation in fastapi website
+    #create a specific database for testing!
+        Testing dependencies with overrides
+        https://fastapi.tiangolo.com/advanced/testing-dependencies/?h=depende
+        https://fastapi.tiangolo.com/advanced/testing-database/
+
+    #Look for scope here inside the pictures faq
+        https://docs.pytest.org/en/7.1.x/how-to/fixtures.html
+        #standard fixture is function, it is destroyed after every test
+        #what we want is module for our scenario
+        
 
 
 
